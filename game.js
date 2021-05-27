@@ -4,14 +4,43 @@ const currentPlayerId = 'player1';
 
 function createGame() {
     const state = {
-        players: {
-            'player1': { x: 1, y: 2 },
-            'player2': { x: 5, y: 8 }
-        },
-        fruits: {
-            'fruit1': { x: 0, y: 1 }
-        }
+        players: {},
+        fruits: {}
     };
+
+    function addPlayer(command) {
+        const playerId = command.playerId;
+        const playerX = command.playerX;
+        const playerY = command.playerY;
+
+        state.players[playerId] = {
+            x: playerX,
+            y: playerY
+        }
+    } 
+
+    function removePlayer(command) {
+        const playerId = command.playerId;
+
+        delete state.players[playerId];
+    }
+
+    function addFruit(command) {
+        const fruitId = command.fruitId;
+        const fruitX = command.fruitX;
+        const fruitY = command.fruitY;
+
+        state.fruits[fruitId] = {
+            x: fruitX,
+            y: fruitY
+        }
+    } 
+
+    function removeFruit(command) {
+        const fruitId = command.fruitId;
+
+        delete state.fruits[fruitId];
+    }
 
     function movePlayer(command) {
         console.log(`game.movePlayer() -> Moving ${command.playerId} with ${command.keyPressed}`);
@@ -47,13 +76,17 @@ function createGame() {
         const player = state.players[command.playerId];
         const moveFunction = acceptedMoves[keyPressed];
 
-        if (moveFunction) {
-        moveFunction(player)
+        if (player && moveFunction) {
+            moveFunction(player)
         }
         
     }
 
     return {
+        addPlayer,
+        removePlayer,
+        addFruit,
+        removeFruit,
         movePlayer,
         state
     };
